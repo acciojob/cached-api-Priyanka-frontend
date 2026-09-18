@@ -1,7 +1,7 @@
-
 import React, { useEffect, useMemo, useState } from "react";
 
 function App() {
+
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -21,23 +21,20 @@ function App() {
   const cachedPosts = useMemo(() => {
     return posts;
   }, [posts]);
-
+  
   if (loading) {
     return <p>Loading...</p>;
   }
-
   return (
     <div>
-
+      {" "}
       {cachedPosts.map((post) => (
         <div key={post.id}>
-          <h2>{post.title}</h2>
-          <p>{post.body}</p>
+          {" "}
+          <h2>{post.title}</h2> <p>{post.body}</p>{" "}
         </div>
-      ))}
+      ))}{" "}
     </div>
   );
 }
-
 export default App;
-
