@@ -28,9 +28,6 @@ function App() {
 
   return (
     <div>
-      <h1>Cached API</h1>
-
-      <p>Data available</p>
 
       {cachedPosts.map((post) => (
         <div key={post.id}>
