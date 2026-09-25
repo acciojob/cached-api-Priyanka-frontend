@@ -1,14 +1,14 @@
 import "regenerator-runtime/runtime";
 import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 function App() {
   const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(true);
 
-  useMemo(() => {
-    setLoading(true);
-
+  // Fetch API only when the component loads
+  useEffect(() => {
     fetch("https://jsonplaceholder.typicode.com/posts")
       .then((response) => response.json())
       .then((data) => {
@@ -19,7 +19,12 @@ function App() {
         console.error(error);
         setLoading(false);
       });
-  }, [input]);
+  }, []);
+
+  // Cache the posts result
+  const cachedPosts = useMemo(() => {
+    return posts;
+  }, [posts]);
 
   return (
     <div>
@@ -32,7 +37,7 @@ function App() {
       {loading ? (
         <p>Loading...</p>
       ) : (
-        posts.map((post) => (
+        cachedPosts.map((post) => (
           <p key={post.id}>{post.title}</p>
         ))
       )}
