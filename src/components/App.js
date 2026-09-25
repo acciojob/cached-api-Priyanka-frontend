@@ -1,14 +1,15 @@
 import "regenerator-runtime/runtime";
 import React, { useMemo, useState } from "react";
-import React, { useEffect, useMemo, useState } from "react";
 
 function App() {
   const [posts, setPosts] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(true);
 
-  // Fetch API only when the component loads
-  useEffect(() => {
+  // Re-fetch when input changes
+  useMemo(() => {
+    setLoading(true);
+
     fetch("https://jsonplaceholder.typicode.com/posts")
       .then((response) => response.json())
       .then((data) => {
@@ -19,9 +20,9 @@ function App() {
         console.error(error);
         setLoading(false);
       });
-  }, []);
+  }, [input]);
 
-  // Cache the posts result
+  // Cache the API result
   const cachedPosts = useMemo(() => {
     return posts;
   }, [posts]);
@@ -29,6 +30,7 @@ function App() {
   return (
     <div>
       <input
+        type="text"
         value={input}
         onChange={(e) => setInput(e.target.value)}
         placeholder="Enter input"
