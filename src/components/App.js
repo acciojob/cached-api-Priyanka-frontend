@@ -1,15 +1,13 @@
 import "regenerator-runtime/runtime";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 function App() {
   const [posts, setPosts] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(true);
 
-  // Re-fetch when input changes
-  useMemo(() => {
-    setLoading(true);
-
+  // Fetch API only once
+  useEffect(() => {
     fetch("https://jsonplaceholder.typicode.com/posts")
       .then((response) => response.json())
       .then((data) => {
@@ -20,12 +18,18 @@ function App() {
         console.error(error);
         setLoading(false);
       });
-  }, [input]);
+  }, []);
 
-  // Cache the API result
+  // Cache/filter the API result based on input
   const cachedPosts = useMemo(() => {
-    return posts;
-  }, [posts]);
+    if (!input.trim()) {
+      return posts;
+    }
+
+    return posts.filter((post) =>
+      post.title.toLowerCase().includes(input.toLowerCase())
+    );
+  }, [posts, input]);
 
   return (
     <div>
