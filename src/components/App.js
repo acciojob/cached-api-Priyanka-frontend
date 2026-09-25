@@ -1,11 +1,14 @@
-import React, { useEffect, useMemo, useState } from "react";
+import "regenerator-runtime/runtime";
+import React, { useMemo, useState } from "react";
 
 function App() {
-
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [input, setInput] = useState("");
 
-  useEffect(() => {
+  useMemo(() => {
+    setLoading(true);
+
     fetch("https://jsonplaceholder.typicode.com/posts")
       .then((response) => response.json())
       .then((data) => {
@@ -13,28 +16,28 @@ function App() {
         setLoading(false);
       })
       .catch((error) => {
-        console.error("Error fetching posts:", error);
+        console.error(error);
         setLoading(false);
       });
-  }, []);
+  }, [input]);
 
-  const cachedPosts = useMemo(() => {
-    return posts;
-  }, [posts]);
-  
-  if (loading) {
-    return <p>Loading...</p>;
-  }
   return (
     <div>
-      {" "}
-      {cachedPosts.map((post) => (
-        <div key={post.id}>
-          {" "}
-          <h2>{post.title}</h2> <p>{post.body}</p>{" "}
-        </div>
-      ))}{" "}
+      <input
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        placeholder="Enter input"
+      />
+
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        posts.map((post) => (
+          <p key={post.id}>{post.title}</p>
+        ))
+      )}
     </div>
   );
 }
+
 export default App;
